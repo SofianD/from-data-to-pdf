@@ -87,6 +87,7 @@ export async function generateBuffer(browser: Browser, targets: FileBuffer[]): P
             }
 
             targets[i]['buffer'] = await page.pdf(targets[i].options as puppeteer.PDFOptions);
+            delete targets[i].options;
         }
         return targets;
     }
@@ -109,7 +110,7 @@ export async function savePDF(path: string, targets: FileBuffer[]): Promise<File
 
     for (let i = 0; i < targetMax; i++) {
         try {
-            const pdfName = targets[i].name + Date.now().toString() + '.pdf';
+            const pdfName = path + targets[i].name + Date.now().toString() + '.pdf';
             const pdf = await fs.promises.open(pdfName, 'a');
             await pdf.appendFile(targets[i].buffer as Buffer);
             pdf.close();
@@ -122,6 +123,59 @@ export async function savePDF(path: string, targets: FileBuffer[]): Promise<File
         }
     }
 
+    return targets;
+}
+
+/**
+ * @author DOUAL Sofian
+ * @description 
+ *
+ * @param { string } path
+ * @param { FileBuffer[] } targets
+ * @returns { Promise<FileBuffer[]> }
+ */
+export async function initDefaultFolder(path: string): Promise<void> {
+    let folderRoot: string[] | string = __filename.split('node_modules\\');
+    folderRoot = folderRoot.length > 1 ? folderRoot[0] : folderRoot[0].split('dist\\');
+    
+    console.log('path: ', path)
+    console.log('diname: ', __dirname);
+    console.log('filename: ', __filename.split('node_modules\\')[0]);
+    console.log('folder root: ', folderRoot);
+
+    return;
+}
+
+/**
+ * @author DOUAL Sofian
+ * @description Carries out the entire process.
+ *
+ * @export
+ * @param { string } path
+ * @param { FileBuffer[] } targets
+ * @returns { Promise<FileBuffer[]> }
+ */
+export async function getPdfAndSave(path: string, targets: FileBuffer[]): Promise<FileBuffer[]> {
+    const browser = await initBrowser();
+    targets = await generateBuffer(browser, targets);
+    await closeBrowser(browser);
+    targets = await savePDF(path, targets);
+    return targets;
+}
+
+/**
+ * @author DOUAL Sofian
+ * @description Carries out the entire process without to save pdf.
+ *
+ * @export
+ * @param { string } path
+ * @param { FileBuffer[] } targets
+ * @returns { Promise<FileBuffer[]> }
+ */
+export async function getPdf(targets: FileBuffer[]): Promise<FileBuffer[]> {
+    const browser = await initBrowser();
+    targets = await generateBuffer(browser, targets);
+    await closeBrowser(browser);
     return targets;
 }
 
