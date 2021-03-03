@@ -1,4 +1,4 @@
-# nHTMLToPDF
+# from-data-to-pdf
 This library converts html files and URL to PDF files or PDF buffer.
 
 ## Installation
