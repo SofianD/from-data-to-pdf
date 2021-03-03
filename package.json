@@ -1,12 +1,11 @@
 {
-  "name": "fromDataToPDF",
-  "version": "1.0.0",
+  "name": "from-data-to-pdf",
+  "version": "1.0.3",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "tsc && node dist/index.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
