@@ -1,6 +1,15 @@
 import * as puppeteer from "puppeteer";
 import { Browser } from "puppeteer";
+import * as fs from "fs";
 
+
+/**
+ * @author DOUAL Sofian
+ * @description Return a browser.
+ *
+ * @export
+ * @returns { Promise<Browser> }
+ */
 export async function initBrowser(): Promise<Browser> {
     try {
         // console.log('BROWSER IS INIT');
@@ -11,6 +20,14 @@ export async function initBrowser(): Promise<Browser> {
     }
 }
 
+/**
+ * @author DOUAL Sofian
+ * @description Close given browser.
+ *
+ * @export
+ * @param { Browser } browser
+ * @returns { Promise<void> }
+ */
 export async function closeBrowser(browser: Browser): Promise<void> {
     try {
         // console.log('BROWSER IS CLOSED');
@@ -22,11 +39,19 @@ export async function closeBrowser(browser: Browser): Promise<void> {
     }
 }
 
+/**
+ * @author DOUAL Sofian
+ * @description Return an array of PDFS buffer.
+ *
+ * @export
+ * @param { Browser } browser
+ * @param { FileBuffer[] } targets
+ * @returns {Promise<FileBuffer>}
+ */
 export async function generateBuffer(browser: Browser, targets: FileBuffer[]): Promise<FileBuffer[]> {
     try {
         const page = await browser.newPage();
         const targetMax: number = targets.length;
-        const res: [] = [];
 
         for (let i = 0; i < targetMax; i++) {
             
@@ -54,6 +79,7 @@ export async function generateBuffer(browser: Browser, targets: FileBuffer[]): P
                 continue;
             }
 
+            // define the default pdf options.
             if (!targets[i].options) {
                 targets[i]['options'] = {
                     printBackground: true
@@ -69,11 +95,43 @@ export async function generateBuffer(browser: Browser, targets: FileBuffer[]): P
     }
 }
 
+/**
+ * @author DOUAL Sofian
+ * @description Save the buffer as a PDF file.
+ *
+ * @export
+ * @param { string } path
+ * @param { FileBuffer[] } targets
+ * @returns { Promise<FileBuffer[]> }
+ */
+export async function savePDF(path: string, targets: FileBuffer[]): Promise<FileBuffer[]> {
+    const targetMax = targets.length;
+
+    for (let i = 0; i < targetMax; i++) {
+        try {
+            const pdfName = targets[i].name + Date.now().toString() + '.pdf';
+            const pdf = await fs.promises.open(pdfName, 'a');
+            await pdf.appendFile(targets[i].buffer as Buffer);
+            pdf.close();
+            delete targets[i].buffer;
+            targets[i]['done'] = true;
+        } catch (error) {
+            delete targets[i].buffer;
+            targets[i]['done'] = false;
+            continue;
+        }
+    }
+
+    return targets;
+}
+
 export interface FileBuffer {
+    name: string,
     url?: string,
     text?: string,
     buffer?: Buffer,
-    options?: PdfOptions
+    options?: PdfOptions,
+    done?: boolean
 }
 
 export interface PdfOptions {
