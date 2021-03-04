@@ -101,8 +101,8 @@ export async function generateBuffer(browser: Browser, targets: FileBuffer[]): P
  * @description Save the buffer as a PDF file.
  *
  * @export
- * @param { string } path
  * @param { FileBuffer[] } targets
+ * @param { string } [folder]
  * @returns { Promise<FileBuffer[]> }
  */
 export async function savePDF(targets: FileBuffer[], folder?: string,): Promise<FileBuffer[]> {
@@ -138,10 +138,9 @@ export async function savePDF(targets: FileBuffer[], folder?: string,): Promise<
 
 /**
  * @author DOUAL Sofian
- * @description 
+ * @description Create folders ./temp, ./temp/target, ./temp/generatedPDF
  *
- * @param { string } path
- * @param { FileBuffer[] } targets
+ * @param { string } [path]
  * @returns { Promise<boolean> }
  */
 export async function initDefaultFolder(path?: string): Promise<boolean> {
@@ -150,7 +149,8 @@ export async function initDefaultFolder(path?: string): Promise<boolean> {
         
         if (path) {
             folderRoot = path;
-        } else {
+        }
+        else {
             folderRoot = __filename.split('\\node_modules');
             folderRoot = (folderRoot.length > 1 ? folderRoot[0] : folderRoot[0].split('\\dist')[0]);
         }
@@ -172,32 +172,76 @@ export async function initDefaultFolder(path?: string): Promise<boolean> {
             let reload = false;
 
             if (!contentTemp.includes('target')) {
-            await fs.promises.mkdir(folderRoot + '/temp/target/');
-            reload = true;
+                await fs.promises.mkdir(folderRoot + '/temp/target/');
+                reload = true;
             }
 
             if (!contentTemp.includes('generatedPDF')) {
-            await fs.promises.mkdir(folderRoot + '/temp/generatedPDF/');
-            reload = true;
+                await fs.promises.mkdir(folderRoot + '/temp/generatedPDF/');
+                reload = true;
             }
 
             if (reload) return false;
 
             return true;
         }
-        } catch (error) {
-            // console.log(error);
-            throw new Error(error);
-        }
+    } catch (error) {
+        // console.log(error);
+        throw new Error(error);
+    }
 }
+
+export async function fromHtmlToString(data: HTMLTarget[], customPath?: string): Promise<FileBuffer[]> {
+    try {
+        let folderRoot: any;
+        
+        if (customPath) {
+            folderRoot = customPath;
+        }
+        else {
+            folderRoot = __filename.split('\\node_modules');
+            folderRoot = (folderRoot.length > 1 ? folderRoot[0] : folderRoot[0].split('\\dist')[0]) + '/temp/target/';
+        }
+        
+        const countProjects = data.length;
+
+        if (countProjects > 0) {
+            const res: FileBuffer[] = [];
+            
+            for(let i = 0; i < countProjects; i++) {
+                let project: FileBuffer = {
+                    name: data[i].projectName,
+                    options: data[i].options,
+                };
+
+                if (data[i].compile) {
+                    project['htmlOptions'] = data[i].ifCompile;
+                }
+
+                project['text'] = await fs.promises.readFile(folderRoot + data[i].fileName, { encoding: 'utf-8' });
+
+                res.push(project);
+            }
+
+            return res;
+        } else {
+            throw 'No project detected.'
+        }
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
+
+// Scripts
 
 /**
  * @author DOUAL Sofian
  * @description Carries out the entire process.
  *
  * @export
- * @param { string } path
  * @param { FileBuffer[] } targets
+ * @param { string } [path]
  * @returns { Promise<FileBuffer[]> }
  */
 export async function getPdfAndSave(targets: FileBuffer[], path?: string): Promise<FileBuffer[]> {
@@ -229,6 +273,14 @@ export async function getPdf(targets: FileBuffer[]): Promise<FileBuffer[]> {
     return targets;
 }
 
+export interface HTMLTarget {
+    projectName: string,
+    fileName: string,
+    options: PdfOptions,
+    compile: boolean,
+    ifCompile?: any[]
+}
+
 export interface FileBuffer {
     name: string,
     url?: string,
@@ -236,6 +288,7 @@ export interface FileBuffer {
     buffer?: Buffer,
     options?: PdfOptions,
     pathOfsavedFile?: string,
+    htmlOptions?: any[],
     done?: boolean
 }
 
