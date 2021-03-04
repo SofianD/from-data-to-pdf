@@ -18,7 +18,8 @@
     "from html to pdf",
     "from html to buffer",
     "from buffer to string",
-    "from string to pdf"
+    "from string to pdf",
+    "screenshot"
   ],
   "author": "",
   "license": "ISC",
