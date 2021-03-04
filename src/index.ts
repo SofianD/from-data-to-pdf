@@ -119,7 +119,7 @@ export async function savePDF(targets: FileBuffer[], folder?: string,): Promise<
                 path = (path.length > 1 ? path[0] : path[0].split('\\dist')[0]) + '/temp/generatedPDF/';
             }
 
-            const pdfName = path + targets[i].name + Date.now().toString() + '.pdf';
+            const pdfName = path + targets[i].name.split(' ').join('-') + Date.now().toString() + '.pdf';
             const pdf = await fs.promises.open(pdfName, 'a');
             await pdf.appendFile(targets[i].buffer as Buffer);
             pdf.close();
