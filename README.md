@@ -117,8 +117,7 @@ async function main() {
     const data = [
         {
             projectName: "Test1",
-            fileName: "project1.html",
-            PdfOptions: {}
+            fileName: "project1.html"
         }
     ];
 
