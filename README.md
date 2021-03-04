@@ -15,13 +15,11 @@ async function main() {
         [
             {
                 name: 'Google',
-                url: 'https://www.google.com',
-                options: {}
+                url: 'https://www.google.com'
             },
             {
                 name: 'String of html',
-                text: '<string>',
-                options: {}
+                text: '<string>'
             }
         ]
     );
