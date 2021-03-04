@@ -54,7 +54,14 @@ export async function generateBuffer(browser: Browser, targets: FileBuffer[]): P
         const targetMax: number = targets.length;
 
         for (let i = 0; i < targetMax; i++) {
-            
+            if (!targets[i].name) {
+                if (targets[i].url) delete targets[i].url;
+                else if (targets[i].text) delete targets[i].text;
+                else if (targets[i].options) delete targets[i].options
+                targets[i]['error'] = new Error('Projects need name.')
+                continue;
+            }
+
             if (targets[i].url) {
                 await page.goto(
                     targets[i].url as string,
@@ -110,6 +117,8 @@ export async function savePDF(targets: FileBuffer[], folder?: string,): Promise<
 
     for (let i = 0; i < targetMax; i++) {
         try {
+            if (!targets[i].name) throw new Error("Projects need name."); 
+
             let path: any;
         
             if (folder) {
@@ -118,7 +127,7 @@ export async function savePDF(targets: FileBuffer[], folder?: string,): Promise<
                 path = __filename.split('\\node_modules');
                 path = (path.length > 1 ? path[0] : path[0].split('\\dist')[0]) + '/temp/generatedPDF/';
             }
-
+            
             const pdfName = path + targets[i].name.split(' ').join('-') + Date.now().toString() + '.pdf';
             const pdf = await fs.promises.open(pdfName, 'a');
             await pdf.appendFile(targets[i].buffer as Buffer);
@@ -129,6 +138,7 @@ export async function savePDF(targets: FileBuffer[], folder?: string,): Promise<
         } catch (error) {
             delete targets[i].buffer;
             targets[i]['done'] = false;
+            targets[i]['error'] = error;
             continue;
         }
     }
@@ -191,7 +201,14 @@ export async function initDefaultFolder(path?: string): Promise<boolean> {
     }
 }
 
-export async function fromHtmlToString(data: HTMLTarget[], customPath?: string): Promise<FileBuffer[]> {
+/**
+ * @author DOUAL Sofian
+ * @description Html file to string
+ *
+ * @param { string } [path]
+ * @returns { Promise<boolean> }
+ */
+export async function fromHtmlFileToString(data: HTMLTarget[], customPath?: string): Promise<FileBuffer[]> {
     try {
         let folderRoot: any;
         
@@ -207,20 +224,31 @@ export async function fromHtmlToString(data: HTMLTarget[], customPath?: string):
 
         if (countProjects > 0) {
             const res: FileBuffer[] = [];
-            
+
             for(let i = 0; i < countProjects; i++) {
-                let project: FileBuffer = {
-                    name: data[i].projectName,
-                    options: data[i].options,
-                };
-
-                if (data[i].compile) {
-                    project['htmlOptions'] = data[i].ifCompile;
+                if (data[i].projectName) {
+                    let project: FileBuffer = {
+                        name: data[i].projectName,
+                        options: data[i].pdfOptions
+                    };
+    
+                    if (data[i].compile) {
+                        project['htmlOptions'] = data[i].ifCompile;
+                    }
+    
+                    project['text'] = await fs.promises.readFile(folderRoot + data[i].fileName, { encoding: 'utf-8' });
+    
+                    res.push(project);
+                    delete data[i];
                 }
-
-                project['text'] = await fs.promises.readFile(folderRoot + data[i].fileName, { encoding: 'utf-8' });
-
-                res.push(project);
+                else {
+                    let project: FileBuffer = {
+                        name: data[i].projectName,
+                        error: new Error('Projects need name.')
+                    };
+                    res.push(project);
+                    delete data[i];
+                }
             }
 
             return res;
@@ -237,7 +265,7 @@ export async function fromHtmlToString(data: HTMLTarget[], customPath?: string):
 
 /**
  * @author DOUAL Sofian
- * @description Carries out the entire process.
+ * @description Carries out the process.
  *
  * @export
  * @param { FileBuffer[] } targets
@@ -259,7 +287,7 @@ export async function getPdfAndSave(targets: FileBuffer[], path?: string): Promi
 
 /**
  * @author DOUAL Sofian
- * @description Carries out the entire process without to save pdf.
+ * @description Carries out the process without to save pdf.
  *
  * @export
  * @param { string } path
@@ -273,10 +301,45 @@ export async function getPdf(targets: FileBuffer[]): Promise<FileBuffer[]> {
     return targets;
 }
 
+/**
+ * @author DOUAL Sofian
+ * @description Get html files and carries out the process.
+ *
+ * @export
+ * @param { HTMLTarget[] } files
+ * @returns { Promise<FileBuffer[]> }
+ */
+export async function fromHtmlFileToPdfAndSave(files: HTMLTarget[]): Promise<FileBuffer[]> {
+    let formatedFiles = await fromHtmlFileToString(files);
+    const browser = await initBrowser();
+    formatedFiles = await generateBuffer(browser, formatedFiles);
+    await closeBrowser(browser);
+    formatedFiles = await savePDF(formatedFiles);
+
+    return formatedFiles;
+}
+
+/**
+ * @author DOUAL Sofian
+ * @description Get html files and carries out the process.
+ *
+ * @export
+ * @param { HTMLTarget[] } files
+ * @returns { Promise<FileBuffer[]> }
+ */
+export async function fromHtmlFileToPdf(files: HTMLTarget[]): Promise<FileBuffer[]> {
+    let formatedFiles = await fromHtmlFileToString(files);
+    const browser = await initBrowser();
+    formatedFiles = await generateBuffer(browser, formatedFiles);
+    await closeBrowser(browser);
+
+    return formatedFiles;
+}
+
 export interface HTMLTarget {
     projectName: string,
     fileName: string,
-    options: PdfOptions,
+    pdfOptions: PdfOptions,
     compile: boolean,
     ifCompile?: any[]
 }
@@ -289,7 +352,8 @@ export interface FileBuffer {
     options?: PdfOptions,
     pathOfsavedFile?: string,
     htmlOptions?: any[],
-    done?: boolean
+    done?: boolean,
+    error?: any,
 }
 
 export interface PdfOptions {
