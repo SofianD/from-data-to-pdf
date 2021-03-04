@@ -1,10 +1,12 @@
 # from-data-to-pdf
-This library converts html files and URL to PDF files or PDF buffer.
+This library converts html files, URL and character string from html files to PDF files or PDF buffer.
 
 ## Installation
 ```$ npm i from-data-to-pdf```
 
-## Usage
+# Usage
+
+## getPdfAndSave(targets: FileBuffer[], path?: string): Promise<FileBuffer[]>
 ```js
 async function main() {
     const dataToPdf = require("from-data-to-pdf");
@@ -32,16 +34,17 @@ async function main() {
     //         pathOfsavedFile: '<your project path>/temp/generatedPdf/Google1614854566504.pdf',
     //         done: true
     //     },
-    //     {
-    //         name: 'My Html Page',
-    //         pathOfsavedFile: '<your project path>/temp/generatedPdf/My-html-code-convert-as-string1614854565481.pdf',
-    //         done: true
-    //     }
+    //     ...
     // ]
+}
 
+main();
+```
 
-    // OR
-
+## getPdf(targets: FileBuffer[]): Promise<FileBuffer[]>
+```js
+async function main() {
+    const dataToPdf = require("from-data-to-pdf");
 
     const listOfPdfBuffer = await dataToPdf.getPdf(
         [
@@ -72,5 +75,63 @@ async function main() {
     // ]
 
 }
+
+main();
+```
+
+## fromHtmlFileToPdfAndSave(files: HTMLTarget[]): Promise<FileBuffer[]>
+```js
+async function main() {
+    const dataToPdf = require("from-data-to-pdf");
+
+    const data = [
+        {
+            projectName: "Test1",
+            fileName: "project1.html",
+            PdfOptions: {}
+        }
+    ];
+
+    const listOfSavedPdf = await dataToPdf.fromHtmlFileToPdfAndSave(data);
+
+    console.log(listOfSavedPdf);
+    // Display:
+    // [
+    //     {
+    //         name: 'Test1',
+    //         done: true,
+    //         pathOfsavedFile: '<your project>/temp/generatedPDF/Test11614887750982.pdf'
+    //     }
+    // ]
+}
+
+main();
+```
+
+## fromHtmlFileToPdf(files: HTMLTarget[]): Promise<FileBuffer[]>
+```js
+async function main() {
+    const dataToPdf = require("from-data-to-pdf");
+
+    const data = [
+        {
+            projectName: "Test1",
+            fileName: "project1.html",
+            PdfOptions: {}
+        }
+    ];
+
+    const listOfPdfBuffer = await dataToPdf.fromHtmlFileToPdfAndSave(data);
+
+    console.log(listOfPdfBuffer);
+    // Display:
+    // [
+    //     {
+    //         name: 'Test1',
+    //         pathOfsavedFile: <Buffer>
+    //     }
+    // ]
+}
+
 main();
 ```
