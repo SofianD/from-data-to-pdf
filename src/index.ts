@@ -105,17 +105,27 @@ export async function generateBuffer(browser: Browser, targets: FileBuffer[]): P
  * @param { FileBuffer[] } targets
  * @returns { Promise<FileBuffer[]> }
  */
-export async function savePDF(path: string, targets: FileBuffer[]): Promise<FileBuffer[]> {
+export async function savePDF(targets: FileBuffer[], folder?: string,): Promise<FileBuffer[]> {
     const targetMax = targets.length;
 
     for (let i = 0; i < targetMax; i++) {
         try {
+            let path: any;
+        
+            if (folder) {
+                path = folder;
+            } else {
+                path = __filename.split('\\node_modules');
+                path = (path.length > 1 ? path[0] : path[0].split('\\dist')[0]) + '/temp/generatedPDF/';
+            }
+
             const pdfName = path + targets[i].name + Date.now().toString() + '.pdf';
             const pdf = await fs.promises.open(pdfName, 'a');
             await pdf.appendFile(targets[i].buffer as Buffer);
             pdf.close();
             delete targets[i].buffer;
             targets[i]['done'] = true;
+            targets[i]['pathOfsavedFile'] = pdfName;
         } catch (error) {
             delete targets[i].buffer;
             targets[i]['done'] = false;
@@ -132,18 +142,53 @@ export async function savePDF(path: string, targets: FileBuffer[]): Promise<File
  *
  * @param { string } path
  * @param { FileBuffer[] } targets
- * @returns { Promise<FileBuffer[]> }
+ * @returns { Promise<boolean> }
  */
-export async function initDefaultFolder(path: string): Promise<void> {
-    let folderRoot: string[] | string = __filename.split('node_modules\\');
-    folderRoot = folderRoot.length > 1 ? folderRoot[0] : folderRoot[0].split('dist\\');
-    
-    console.log('path: ', path)
-    console.log('diname: ', __dirname);
-    console.log('filename: ', __filename.split('node_modules\\')[0]);
-    console.log('folder root: ', folderRoot);
+export async function initDefaultFolder(path?: string): Promise<boolean> {
+    try {
+        let folderRoot: any;
+        
+        if (path) {
+            folderRoot = path;
+        } else {
+            folderRoot = __filename.split('\\node_modules');
+            folderRoot = (folderRoot.length > 1 ? folderRoot[0] : folderRoot[0].split('\\dist')[0]);
+        }
 
-    return;
+        let contentFolder = await fs.promises.readdir(folderRoot);
+        contentFolder = contentFolder.filter(x => x === 'temp');
+
+        if (contentFolder.length === 0) {
+            await fs.promises.mkdir(folderRoot + '/temp/');
+
+            await fs.promises.mkdir(folderRoot + '/temp/target/');
+
+            await fs.promises.mkdir(folderRoot + '/temp/generatedPDF/');
+
+            return false;
+        }
+        else {
+            const contentTemp = await fs.promises.readdir(folderRoot + '/temp/');
+            let reload = false;
+
+            if (!contentTemp.includes('target')) {
+            await fs.promises.mkdir(folderRoot + '/temp/target/');
+            reload = true;
+            }
+
+            if (!contentTemp.includes('generatedPDF')) {
+            await fs.promises.mkdir(folderRoot + '/temp/generatedPDF/');
+            reload = true;
+            }
+
+            if (reload) return false;
+
+            return true;
+        }
+        } catch (error) {
+            // console.log(error);
+            throw new Error(error);
+        }
 }
 
 /**
@@ -155,11 +200,16 @@ export async function initDefaultFolder(path: string): Promise<void> {
  * @param { FileBuffer[] } targets
  * @returns { Promise<FileBuffer[]> }
  */
-export async function getPdfAndSave(path: string, targets: FileBuffer[]): Promise<FileBuffer[]> {
+export async function getPdfAndSave(targets: FileBuffer[], path?: string): Promise<FileBuffer[]> {
     const browser = await initBrowser();
     targets = await generateBuffer(browser, targets);
     await closeBrowser(browser);
-    targets = await savePDF(path, targets);
+    if (path) {
+        targets = await savePDF(targets, path);
+    } else {
+        await initDefaultFolder();
+        targets = await savePDF(targets);
+    }
     return targets;
 }
 
@@ -185,6 +235,7 @@ export interface FileBuffer {
     text?: string,
     buffer?: Buffer,
     options?: PdfOptions,
+    pathOfsavedFile?: string,
     done?: boolean
 }
 

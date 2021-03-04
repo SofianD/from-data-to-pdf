@@ -1,13 +1,25 @@
 {
   "name": "from-data-to-pdf",
-  "version": "1.0.5",
+  "version": "1.0.8",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "tsc && node test/test.js"
   },
-  "keywords": [],
+  "keywords": [
+    "pdf",
+    "generate",
+    "data",
+    "html",
+    "node",
+    "url",
+    "generator",
+    "from html to pdf",
+    "from html to buffer",
+    "from buffer to string",
+    "from string to pdf"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
