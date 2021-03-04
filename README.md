@@ -63,13 +63,11 @@ async function main() {
     // [
     //     {
     //         name: 'Google',
-    //         buffer: [binary data...],
-    //         done: true
+    //         buffer: [binary data...]
     //     },
     //     {
     //         name: 'My Html Page',
-    //         buffer: [binary data...],
-    //         done: true
+    //         buffer: [binary data...]
     //     }
     // ]
 
