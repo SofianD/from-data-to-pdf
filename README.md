@@ -17,7 +17,7 @@ async function main() {
                 options: {}
             },
             {
-                name: 'My Html Page',
+                name: 'My html code convert as string',
                 text: '<string>',
                 options: {}
             }
@@ -34,7 +34,7 @@ async function main() {
     //     },
     //     {
     //         name: 'My Html Page',
-    //         pathOfsavedFile: '<your project path>/temp/generatedPdf/Google1614854565481.pdf',
+    //         pathOfsavedFile: '<your project path>/temp/generatedPdf/My-html-code-convert-as-string1614854565481.pdf',
     //         done: true
     //     }
     // ]
