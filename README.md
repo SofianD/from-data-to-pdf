@@ -6,7 +6,7 @@ This library converts html files, URL and character string from html files to PD
 
 # Usage
 
-## getPdfAndSave(targets: FileBuffer[], path?: string): Promise<FileBuffer[]>
+## getPdfAndSave(targets: FileBuffer[]): Promise<FileBuffer[]>
 ```js
 async function main() {
     const dataToPdf = require("from-data-to-pdf");
@@ -19,7 +19,7 @@ async function main() {
                 options: {}
             },
             {
-                name: 'My html code convert as string',
+                name: 'String of html',
                 text: '<string>',
                 options: {}
             }
@@ -34,7 +34,11 @@ async function main() {
     //         pathOfsavedFile: '<your project path>/temp/generatedPdf/Google1614854566504.pdf',
     //         done: true
     //     },
-    //     ...
+    //     {
+    //         name: 'String of html',
+    //         pathOfsavedFile: '<your project path>/temp/generatedPdf/Strin-of-html1614854568915.pdf',
+    //         done: true
+    //     }
     // ]
 }
 
@@ -69,7 +73,7 @@ async function main() {
     //         buffer: [binary data...]
     //     },
     //     {
-    //         name: 'My Html Page',
+    //         name: 'String of html',
     //         buffer: [binary data...]
     //     }
     // ]
