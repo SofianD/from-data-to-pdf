@@ -30,12 +30,10 @@ async function main() {
     //     {
     //         name: 'Google',
     //         pathOfsavedFile: '<your project path>/temp/generatedPdf/Google1614854566504.pdf',
-    //         done: true
     //     },
     //     {
     //         name: 'String of html',
     //         pathOfsavedFile: '<your project path>/temp/generatedPdf/Strin-of-html1614854568915.pdf',
-    //         done: true
     //     }
     // ]
 }
@@ -98,7 +96,6 @@ async function main() {
     // [
     //     {
     //         name: 'Test1',
-    //         done: true,
     //         pathOfsavedFile: '<your project>/temp/generatedPDF/Test11614887750982.pdf'
     //     }
     // ]

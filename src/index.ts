@@ -133,11 +133,9 @@ export async function savePDF(targets: FileBuffer[], folder?: string,): Promise<
             await pdf.appendFile(targets[i].buffer as Buffer);
             pdf.close();
             delete targets[i].buffer;
-            targets[i]['done'] = true;
             targets[i]['pathOfsavedFile'] = pdfName;
         } catch (error) {
             delete targets[i].buffer;
-            targets[i]['done'] = false;
             targets[i]['error'] = error;
             continue;
         }
@@ -352,7 +350,6 @@ export interface FileBuffer {
     options?: PdfOptions,
     pathOfsavedFile?: string,
     htmlOptions?: any[],
-    done?: boolean,
     error?: any,
 }
 
