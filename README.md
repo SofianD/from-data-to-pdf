@@ -6,46 +6,13 @@ This library converts html files, URL and character string from html files to PD
 
 # Usage
 
-## getPdfAndSave(targets: FileBuffer[]): Promise<FileBuffer[]>
+## getPdf(targets: FileBuffer[], save?: string): Promise<FileBuffer[]>
 -   targets:
-    * list of [FileBuffer](#FileBuffer)
-
-```js
-async function main() {
-    const dataToPdf = require("from-data-to-pdf");
-
-    const listOfSavedPdf = await dataToPdf.getPdfAndSave(
-        [
-            {
-                name: 'Google',
-                url: 'https://www.google.com'
-            },
-            {
-                name: 'String of html',
-                text: '<string>'
-            }
-        ]
-    );
-
-    console.log(listOfSavedPdf);
-    // Display:
-    // [
-    //     {
-    //         name: 'Google',
-    //         pathOfsavedFile: '<your project path>/temp/generatedPdf/Google1614854566504.pdf',
-    //     },
-    //     {
-    //         name: 'String of html',
-    //         pathOfsavedFile: '<your project path>/temp/generatedPdf/Strin-of-html1614854568915.pdf',
-    //     }
-    // ]
-}
-main();
-```
-
-## getPdf(targets: FileBuffer[]): Promise<FileBuffer[]>
--   targets:
-    * list of [FileBuffer](#FileBuffer)
+    * list of [FileBuffer](#FileBuffer).
+-   save:
+    * is optionnal, is `false` by default.
+    * type `boolean`.
+    * `true` to save targets.
 
 ```js
 async function main() {
@@ -80,43 +47,12 @@ async function main() {
 main();
 ```
 
-## fromHtmlFileToPdfAndSave(files: HTMLTarget[], path?: string): Promise<FileBuffer[]>
--   files:
-    * list of [HTMLTarget](#HTMLTarget)
--   path: 
-    * is optionnal.
-    * Absolute path of the folder containing your html files.
-
-> ***CSS must be in your html files.***
-
-```js
-async function main() {
-    const dataToPdf = require("from-data-to-pdf");
-
-    const data = [
-        {
-            projectName: "Test1",
-            fileName: "project1.html"
-        }
-    ];
-
-    const listOfSavedPdf = await dataToPdf.fromHtmlFileToPdfAndSave(data);
-
-    console.log(listOfSavedPdf);
-    // Display:
-    // [
-    //     {
-    //         name: 'Test1',
-    //         pathOfsavedFile: '<your project>/temp/generatedPDF/Test11614887750982.pdf'
-    //     }
-    // ]
-}
-main();
-```
-
 ## fromHtmlFileToPdf(files: HTMLTarget[], path?: string): Promise<FileBuffer[]>
 -   files:
-    * list of [HTMLTarget](#HTMLTarget)
+    * list of [HTMLTarget](#HTMLTarget).
+-   save:
+    * type `boolean`.
+    * `true` to save targets.
 -   path: 
     * is optionnal.
     * Absolute path of the folder containing your html files.
@@ -134,7 +70,7 @@ async function main() {
         }
     ];
 
-    const listOfPdfBuffer = await dataToPdf.fromHtmlFileToPdfAndSave(data);
+    const listOfPdfBuffer = await dataToPdf.fromHtmlFileToPdf(data, true);
 
     console.log(listOfPdfBuffer);
     // Display:
@@ -167,36 +103,13 @@ export interface FileBuffer {
     url?: string,
     text?: string,
     buffer?: Buffer,
-    options?: PdfOptions,
+    options?: puppeteer.PDFOptions,
     pathOfsavedFile?: string,
     htmlOptions?: any[],
     error?: any,
 }
 ``` 
 
-## PdfOptions
+## puppeter.PDFOptions
 
 > Check [puppeteer.PDFOptions](https://pptr.dev/#?product=Puppeteer&version=v8.0.0&show=api-pagepdfoptions) for more informations.
-
-```ts
-export interface PdfOptions {
-    path?: string,
-    scale?: number,
-    displayHeaderFooter?: boolean,
-    headerTemplate?: string,
-    footerTemplate?: string,
-    printBackground?: boolean,
-    landscape?: boolean,
-    pageRanges?: string,
-    format?: string,
-    width?: string | number,
-    height?: string | number,
-    margin?: {
-        top?: string | number,
-        right?: string | number,
-        bottom?: string | number,
-        left?: string | number,
-    },
-    preferCSSPageSize?: boolean
-}
-``` 
