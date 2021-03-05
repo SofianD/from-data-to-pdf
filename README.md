@@ -7,8 +7,8 @@ This library converts html files, URL and character string from html files to PD
 # Usage
 
 ## getPdfAndSave(targets: FileBuffer[]): Promise<FileBuffer[]>
--   targets:
-    * list of [ <FileBuffer> ](#<FileBuffer>)
+1.   targets:
+    * list of [FileBuffer](#<FileBuffer>)
 
 ```js
 async function main() {
@@ -44,8 +44,8 @@ main();
 ```
 
 ## getPdf(targets: FileBuffer[]): Promise<FileBuffer[]>
--   targets:
-    * list of [ <FileBuffer> ](#<FileBuffer>)
+1.   targets:
+    * list of [FileBuffer](#<FileBuffer>)
 
 ```js
 async function main() {
@@ -81,9 +81,9 @@ main();
 ```
 
 ## fromHtmlFileToPdfAndSave(files: HTMLTarget[], path?: string): Promise<FileBuffer[]>
--   files:
-    * list of [ <HTMLTarget> ](#<HTMLTarget>)
--   path: 
+1.   files:
+    * list of [HTMLTarget](#<HTMLTarget>)
+2.   path: 
     * is optionnal.
     * Absolute path of the folder containing your html files.
 
@@ -115,13 +115,13 @@ main();
 ```
 
 ## fromHtmlFileToPdf(files: HTMLTarget[], path?: string): Promise<FileBuffer[]>
--   files:
-    * list of [ <HTMLTarget> ](#<HTMLTarget>)
--   path: 
+1.   files:
+    * list of [HTMLTarget](#<HTMLTarget>)
+2.   path: 
     * is optionnal.
     * Absolute path of the folder containing your html files.
 
-> ***CSS have to be in your html files.***
+> ***CSS must be in your html files.***
 
 ```js
 async function main() {
@@ -152,7 +152,6 @@ main();
 # Models
 
 ## <HTMLTarget>
-
 ```ts
 export interface HTMLTarget {
     projectName: string,
@@ -162,7 +161,6 @@ export interface HTMLTarget {
 ``` 
 
 ## <FileBuffer>
-
 ```ts
 export interface FileBuffer {
     name: string,
@@ -178,7 +176,7 @@ export interface FileBuffer {
 
 ## <PdfOptions>
 
-> Check [ <puppeteer.PDFOptions> ](https://pptr.dev/#?product=Puppeteer&version=v8.0.0&show=api-pagepdfoptions) for more informations.
+> Check [puppeteer.PDFOptions](https://pptr.dev/#?product=Puppeteer&version=v8.0.0&show=api-pagepdfoptions) for more informations.
 
 ```ts
 export interface PdfOptions {
