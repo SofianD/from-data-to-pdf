@@ -8,7 +8,7 @@ This library converts html files, URL and character string from html files to PD
 
 ## getPdfAndSave(targets: FileBuffer[]): Promise<FileBuffer[]>
 -   targets:
-    * list of [FileBuffer](#<FileBuffer>)
+    * list of [FileBuffer](#FileBuffer)
 
 ```js
 async function main() {
@@ -45,7 +45,7 @@ main();
 
 ## getPdf(targets: FileBuffer[]): Promise<FileBuffer[]>
 -   targets:
-    * list of [FileBuffer](#<FileBuffer>)
+    * list of [FileBuffer](#FileBuffer)
 
 ```js
 async function main() {
@@ -82,7 +82,7 @@ main();
 
 ## fromHtmlFileToPdfAndSave(files: HTMLTarget[], path?: string): Promise<FileBuffer[]>
 -   files:
-    * list of [HTMLTarget](#<HTMLTarget>)
+    * list of [HTMLTarget](#HTMLTarget)
 -   path: 
     * is optionnal.
     * Absolute path of the folder containing your html files.
@@ -116,7 +116,7 @@ main();
 
 ## fromHtmlFileToPdf(files: HTMLTarget[], path?: string): Promise<FileBuffer[]>
 -   files:
-    * list of [HTMLTarget](#<HTMLTarget>)
+    * list of [HTMLTarget](#HTMLTarget)
 -   path: 
     * is optionnal.
     * Absolute path of the folder containing your html files.
@@ -151,7 +151,7 @@ main();
 
 # Models
 
-## <HTMLTarget>
+## HTMLTarget
 ```ts
 export interface HTMLTarget {
     projectName: string,
@@ -160,7 +160,7 @@ export interface HTMLTarget {
 }
 ``` 
 
-## <FileBuffer>
+## FileBuffer
 ```ts
 export interface FileBuffer {
     name: string,
@@ -174,7 +174,7 @@ export interface FileBuffer {
 }
 ``` 
 
-## <PdfOptions>
+## PdfOptions
 
 > Check [puppeteer.PDFOptions](https://pptr.dev/#?product=Puppeteer&version=v8.0.0&show=api-pagepdfoptions) for more informations.
 
