@@ -7,7 +7,7 @@ This library converts html files, URL and character string from html files to PD
 # Usage
 
 ## getPdfAndSave(targets: FileBuffer[]): Promise<FileBuffer[]>
-1.   targets:
+-   targets:
     * list of [FileBuffer](#<FileBuffer>)
 
 ```js
@@ -44,7 +44,7 @@ main();
 ```
 
 ## getPdf(targets: FileBuffer[]): Promise<FileBuffer[]>
-1.   targets:
+-   targets:
     * list of [FileBuffer](#<FileBuffer>)
 
 ```js
@@ -81,9 +81,9 @@ main();
 ```
 
 ## fromHtmlFileToPdfAndSave(files: HTMLTarget[], path?: string): Promise<FileBuffer[]>
-1.   files:
+-   files:
     * list of [HTMLTarget](#<HTMLTarget>)
-2.   path: 
+-   path: 
     * is optionnal.
     * Absolute path of the folder containing your html files.
 
@@ -115,9 +115,9 @@ main();
 ```
 
 ## fromHtmlFileToPdf(files: HTMLTarget[], path?: string): Promise<FileBuffer[]>
-1.   files:
+-   files:
     * list of [HTMLTarget](#<HTMLTarget>)
-2.   path: 
+-   path: 
     * is optionnal.
     * Absolute path of the folder containing your html files.
 
