@@ -46,9 +46,10 @@ export async function closeBrowser(browser: Browser): Promise<void> {
  * @export
  * @param { Browser } browser
  * @param { FileBuffer[] } targets
+ * @param { string } [path]
  * @returns {Promise<FileBuffer>}
  */
-export async function generateBuffer(browser: Browser, targets: FileBuffer[]): Promise<FileBuffer[]> {
+export async function generateBuffer(browser: Browser, targets: FileBuffer[], path?: string): Promise<FileBuffer[]> {
     try {
         const page = await browser.newPage();
         const targetMax: number = targets.length;
@@ -61,7 +62,6 @@ export async function generateBuffer(browser: Browser, targets: FileBuffer[]): P
                 targets[i]['error'] = new Error('Projects need name.')
                 continue;
             }
-
             if (targets[i].url) {
                 await page.goto(
                     targets[i].url as string,
@@ -71,7 +71,6 @@ export async function generateBuffer(browser: Browser, targets: FileBuffer[]): P
                 );
                 delete targets[i].url;
             }
-
             else if (targets[i].text) {
                 await page.setContent(
                     targets[i].text as string,
@@ -81,7 +80,6 @@ export async function generateBuffer(browser: Browser, targets: FileBuffer[]): P
                 );
                 delete targets[i].text;
             }
-            
             else {
                 continue;
             }
@@ -95,8 +93,22 @@ export async function generateBuffer(browser: Browser, targets: FileBuffer[]): P
                 };
             }
 
-            targets[i]['buffer'] = await page.pdf(targets[i].options as puppeteer.PDFOptions);
-            delete targets[i].options;
+            if (path) {
+                const pdfName = path + targets[i].name.split(' ').join('-') + Date.now().toString() + '.pdf';
+                (targets[i].options as puppeteer.PDFOptions)['path'] = pdfName;
+
+                if (targets[i].url) delete targets[i].url;
+                else if (targets[i].text) delete targets[i].text;
+
+                await page.pdf(targets[i].options as puppeteer.PDFOptions);
+                targets[i]['pathOfsavedFile'] = pdfName;
+
+                delete targets[i].options;
+            } 
+            else {
+                targets[i]['buffer'] = await page.pdf(targets[i].options as puppeteer.PDFOptions);
+                delete targets[i].options;
+            }
         }
         return targets;
     }
@@ -222,6 +234,7 @@ export async function fromHtmlFileToString(data: HTMLTarget[], path?: string): P
     
                     if (data[i].compile) {
                         project['htmlOptions'] = data[i].ifCompile;
+                        // ...
                     }
     
                     project['text'] = await fs.promises.readFile(folderRoot + data[i].fileName, { encoding: 'utf-8' });
@@ -253,31 +266,28 @@ export async function fromHtmlFileToString(data: HTMLTarget[], path?: string): P
 
 /**
  * @author DOUAL Sofian
- * @description Carries out the process.
- *
- * @export
- * @param { FileBuffer[] } targets
- * @returns { Promise<FileBuffer[]> }
- */
-export async function getPdfAndSave(targets: FileBuffer[]): Promise<FileBuffer[]> {
-    const browser = await initBrowser();
-    targets = await generateBuffer(browser, targets);
-    await closeBrowser(browser);
-    targets = await savePDF(targets);
-    return targets;
-}
-
-/**
- * @author DOUAL Sofian
  * @description Carries out the process without to save pdf.
  *
  * @export
  * @param { FileBuffer[] } targets
+ * @param { boolean } [save]
  * @returns { Promise<FileBuffer[]> }
  */
-export async function getPdf(targets: FileBuffer[]): Promise<FileBuffer[]> {
+export async function getPdf(targets: FileBuffer[], save: boolean = false): Promise<FileBuffer[]> {
     const browser = await initBrowser();
-    targets = await generateBuffer(browser, targets);
+    if (save) {
+
+        await initDefaultFolder();
+
+        let folderToSavePdf: any= __filename.split('\\node_modules');
+        folderToSavePdf = (folderToSavePdf.length > 1 ? folderToSavePdf[0] : folderToSavePdf[0].split('\\dist')[0]) + '/temp/generatedPDF/';
+        
+        targets = await generateBuffer(browser, targets, folderToSavePdf);
+    }
+    else {
+        targets = await generateBuffer(browser, targets);
+    }
+    // targets = await generateBuffer(browser, targets);
     await closeBrowser(browser);
     return targets;
 }
@@ -288,35 +298,22 @@ export async function getPdf(targets: FileBuffer[]): Promise<FileBuffer[]> {
  *
  * @export
  * @param { HTMLTarget[] } files
+ * @param { boolean } save
  * @param { string } [path]
  * @returns { Promise<FileBuffer[]> }
  */
-export async function fromHtmlFileToPdfAndSave(files: HTMLTarget[], path?: string): Promise<FileBuffer[]> {
-    await initDefaultFolder();
-    let formatedFiles = await fromHtmlFileToString(files, path ?? undefined);
-    
-    const browser = await initBrowser();
-    formatedFiles = await generateBuffer(browser, formatedFiles as FileBuffer[]);
-    await closeBrowser(browser);
-    
-    formatedFiles = await savePDF(formatedFiles);
-
-    return formatedFiles;
-}
-
-/**
- * @author DOUAL Sofian
- * @description Get html files and carries out the process.
- *
- * @export
- * @param { HTMLTarget[] } files
- * @param { string } [path]
- * @returns { Promise<FileBuffer[]> }
- */
-export async function fromHtmlFileToPdf(files: HTMLTarget[], path?: string): Promise<FileBuffer[]> {
+export async function fromHtmlFileToPdf(files: HTMLTarget[], save: boolean, path?: string): Promise<FileBuffer[]> {
     let formatedFiles = await fromHtmlFileToString(files, path ?? undefined);
     const browser = await initBrowser();
-    formatedFiles = await generateBuffer(browser, formatedFiles);
+    if (save) {
+        await initDefaultFolder();
+        let folderToSavePdf: any= __filename.split('\\node_modules');
+        folderToSavePdf = (folderToSavePdf.length > 1 ? folderToSavePdf[0] : folderToSavePdf[0].split('\\dist')[0]) + '/temp/generatedPDF/';
+        formatedFiles = await generateBuffer(browser, formatedFiles, folderToSavePdf);
+    }
+    else {
+        formatedFiles = await generateBuffer(browser, formatedFiles);
+    }
     await closeBrowser(browser);
 
     return formatedFiles;
@@ -325,7 +322,7 @@ export async function fromHtmlFileToPdf(files: HTMLTarget[], path?: string): Pro
 export interface HTMLTarget {
     projectName: string,
     fileName: string,
-    pdfOptions: PdfOptions,
+    pdfOptions: puppeteer.PDFOptions,
     compile: boolean,
     ifCompile?: any[]
 }
@@ -335,29 +332,8 @@ export interface FileBuffer {
     url?: string,
     text?: string,
     buffer?: Buffer,
-    options?: PdfOptions,
+    options?: puppeteer.PDFOptions,
     pathOfsavedFile?: string,
     htmlOptions?: any[],
     error?: any,
-}
-
-export interface PdfOptions {
-    path?: string,
-    scale?: number,
-    displayHeaderFooter?: boolean,
-    headerTemplate?: string,
-    footerTemplate?: string,
-    printBackground?: boolean,
-    landscape?: boolean,
-    pageRanges?: string,
-    format?: string,
-    width?: string | number,
-    height?: string | number,
-    margin?: {
-        top?: string | number,
-        right?: string | number,
-        bottom?: string | number,
-        left?: string | number,
-    },
-    preferCSSPageSize?: boolean
 }
