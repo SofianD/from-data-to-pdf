@@ -7,6 +7,9 @@ This library converts html files, URL and character string from html files to PD
 # Usage
 
 ## getPdfAndSave(targets: FileBuffer[]): Promise<FileBuffer[]>
+-   targets:
+    * list of [ <FileBuffer> ](#<FileBuffer>)
+
 ```js
 async function main() {
     const dataToPdf = require("from-data-to-pdf");
@@ -37,11 +40,13 @@ async function main() {
     //     }
     // ]
 }
-
 main();
 ```
 
 ## getPdf(targets: FileBuffer[]): Promise<FileBuffer[]>
+-   targets:
+    * list of [ <FileBuffer> ](#<FileBuffer>)
+
 ```js
 async function main() {
     const dataToPdf = require("from-data-to-pdf");
@@ -58,7 +63,7 @@ async function main() {
             }
         ]
     );
-    
+
     console.log(listOfPdfBuffer);
     // Display:
     // [
@@ -71,13 +76,19 @@ async function main() {
     //         buffer: [binary data...]
     //     }
     // ]
-
 }
-
 main();
 ```
 
-## fromHtmlFileToPdfAndSave(files: HTMLTarget[]): Promise<FileBuffer[]>
+## fromHtmlFileToPdfAndSave(files: HTMLTarget[], path?: string): Promise<FileBuffer[]>
+-   files:
+    * list of [ <HTMLTarget> ](#<HTMLTarget>)
+-   path: 
+    * is optionnal.
+    * Absolute path of the folder containing your html files.
+
+> ***CSS must be in your html files.***
+
 ```js
 async function main() {
     const dataToPdf = require("from-data-to-pdf");
@@ -100,11 +111,18 @@ async function main() {
     //     }
     // ]
 }
-
 main();
 ```
 
-## fromHtmlFileToPdf(files: HTMLTarget[]): Promise<FileBuffer[]>
+## fromHtmlFileToPdf(files: HTMLTarget[], path?: string): Promise<FileBuffer[]>
+-   files:
+    * list of [ <HTMLTarget> ](#<HTMLTarget>)
+-   path: 
+    * is optionnal.
+    * Absolute path of the folder containing your html files.
+
+> ***CSS have to be in your html files.***
+
 ```js
 async function main() {
     const dataToPdf = require("from-data-to-pdf");
@@ -130,3 +148,57 @@ async function main() {
 
 main();
 ```
+
+# Models
+
+## <HTMLTarget>
+
+```ts
+export interface HTMLTarget {
+    projectName: string,
+    fileName: string,
+    pdfOptions: PdfOptions,
+}
+``` 
+
+## <FileBuffer>
+
+```ts
+export interface FileBuffer {
+    name: string,
+    url?: string,
+    text?: string,
+    buffer?: Buffer,
+    options?: PdfOptions,
+    pathOfsavedFile?: string,
+    htmlOptions?: any[],
+    error?: any,
+}
+``` 
+
+## <PdfOptions>
+
+> Check [ <puppeteer.PDFOptions> ](https://pptr.dev/#?product=Puppeteer&version=v8.0.0&show=api-pagepdfoptions) for more informations.
+
+```ts
+export interface PdfOptions {
+    path?: string,
+    scale?: number,
+    displayHeaderFooter?: boolean,
+    headerTemplate?: string,
+    footerTemplate?: string,
+    printBackground?: boolean,
+    landscape?: boolean,
+    pageRanges?: string,
+    format?: string,
+    width?: string | number,
+    height?: string | number,
+    margin?: {
+        top?: string | number,
+        right?: string | number,
+        bottom?: string | number,
+        left?: string | number,
+    },
+    preferCSSPageSize?: boolean
+}
+``` 
