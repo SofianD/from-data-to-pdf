@@ -1,7 +1,7 @@
 {
   "name": "from-data-to-pdf",
-  "version": "1.0.9",
-  "description": "",
+  "version": "1.0.14",
+  "description": "This library converts html files, URL and character string from html files to PDF files or PDF buffer.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -21,7 +21,11 @@
     "from string to pdf",
     "screenshot"
   ],
-  "author": "",
+  "author": {
+    "name": "Doual Sofian",
+    "email": "sofiand.dev@gmail.com",
+    "url": "https://fr.linkedin.com/in/sofiandoual"
+  },
   "license": "ISC",
   "dependencies": {
     "puppeteer": "^7.1.0"
