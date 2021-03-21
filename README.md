@@ -118,7 +118,6 @@ export interface FileBuffer {
     buffer?: Buffer,
     options?: puppeteer.PDFOptions,
     pathOfsavedFile?: string,
-    htmlOptions?: any[],
     error?: any,
 }
 ``` 
