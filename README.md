@@ -12,58 +12,59 @@ Is working for:
 
 # Usage
 
-## getPdf(targets: FileBuffer[], save?: string): Promise<FileBuffer[]>
+## getPdf(targets: [FileBuffer](#FileBuffer), save: string, path?: string): Promise<FileBuffer[]>
 -   targets:
     * list of [FileBuffer](#FileBuffer).
 -   save:
-    * is optionnal, is `false` by default.
     * type `boolean`.
-    * `true` to save targets.
+    * `true` to save targets, `false` to get buffers.
+-   path:
+    * is optionnal.
+    * type `string`.
 
 ```js
 async function main() {
     const dataToPdf = require("from-data-to-pdf");
 
-    const listOfPdfBuffer = await dataToPdf.getPdf(
-        [
-            {
-                name: 'Google',
-                url: 'https://www.google.com'
-            },
-            {
-                name: 'String of html',
-                text: '<html string>'
-            }
-        ]
-    );
+    const data =[
+        {
+            name: 'Google',
+            url: 'https://www.google.com'
+        },
+        {
+            name: 'String of html',
+            text: '<html string>'
+        }
+    ];
+
+    const listOfPdfBuffer = await dataToPdf.getPdf(data, true, 'C:/Users/Me/Documents/MyPDF/');
 
     console.log(listOfPdfBuffer);
     // Display:
     // [
     //     {
     //         name: 'Google',
-    //         buffer: [binary data...]
+    //         pathOfsavedFile: 'C:/Users/Me/Documents/MyPDF/google15156514.pdf'
     //     },
     //     {
     //         name: 'String of html',
-    //         buffer: [binary data...]
+    //         pathOfsavedFile: 'C:/Users/Me/Documents/MyPDF/string-of-html15156515.pdf'
     //     }
     // ]
 }
 main();
 ```
 
-## fromHtmlFileToPdf(files: HTMLTarget[], path?: string): Promise<FileBuffer[]>
+## fromHtmlFileToPdf(files: [HTMLTarget](#HTMLTarget), save: boolean, path?: [Path](#Path)): Promise<FileBuffer[]>
 -   files:
     * list of [HTMLTarget](#HTMLTarget).
-    * **HTML files must be in folder** `path-of-your-app/temp/target/`. 
-      You can use method `initDefaultFolder()`. Then, import your files in `path-of-your-app/temp/target/`.
 -   save:
     * type `boolean`.
-    * `true` to save targets.
+    * `true` to save targets, `false` to get buffers.
 -   path: 
     * is optionnal.
-    * Absolute path of the folder containing your html files.
+    * type [Path](#Path).
+    * /!\ relative path starts from the app directory.
 
 > ***CSS must be in your html files.***
 
@@ -71,26 +72,26 @@ main();
 async function main() {
     const dataToPdf = require("from-data-to-pdf");
 
-    // If my html files are not in my-app/temp/target/ folder:
+    // If my html files are not in my-app/temp/target/ and I don't have a custom path:
     await dataToPdf.initDefaultFolder();
     // Now, I move my html files in the created folder: my-app/temp/target/project1.html
     // Then...
 
     const data = [
         {
-            projectName: "Test1",
+            projectName: "Test",
             fileName: "project1.html"
         }
     ];
 
-    const listOfSavedPDF = await dataToPdf.fromHtmlFileToPdf(data, true);
+    const listOfSavedPDF = await dataToPdf.fromHtmlFileToPdf(data, true, 'C:/Users/Me/Documents/MyPDF/');
 
     console.log(listOfSavedPDF);
     // Display:
     // [
     //     {
-    //         name: 'Test1',
-    //         pathOfsavedFile: 'my-app/temp/generatedPDF/test1.pdf'
+    //         name: 'Test',
+    //         pathOfsavedFile: 'C:/Users/Me/Documents/MyPDF/test1561654165.pdf'
     //     }
     // ]
 }
@@ -103,24 +104,32 @@ main();
 ## HTMLTarget
 ```ts
 export interface HTMLTarget {
-    projectName: string,
-    fileName: string,
-    pdfOptions: PdfOptions,
+    projectName: string;
+    fileName: string;
+    pdfOptions: PdfOptions;
 }
 ``` 
 
 ## FileBuffer
 ```ts
 export interface FileBuffer {
-    name: string,
-    url?: string,
-    text?: string,
-    buffer?: Buffer,
-    options?: puppeteer.PDFOptions,
-    pathOfsavedFile?: string,
-    error?: any,
+    name: string;
+    url?: string;
+    text?: string;
+    buffer?: Buffer;
+    options?: puppeteer.PDFOptions;
+    pathOfsavedFile?: string;
+    error?: any;
 }
 ``` 
+
+## Path
+```ts
+export interface Path {
+    toGetFiles?: string;
+    toSaveFiles?: string;
+}
+```
 
 ## puppeter.PDFOptions
 
