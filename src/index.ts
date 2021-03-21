@@ -1,7 +1,7 @@
 import * as puppeteer from "puppeteer";
 import { Browser } from "puppeteer";
 import * as fs from "fs";
-
+import * as pathModule from "path"
 
 /**
  * @author DOUAL Sofian
@@ -202,50 +202,47 @@ export async function initDefaultFolder(): Promise<boolean> {
 
 /**
  * @author DOUAL Sofian
- * @description Html file to string
+ * @description Converts HTML files to string.
  *
- * @param { HTMLTarget } data
+ * @param { HTMLTarget[] } data
  * @param { string } [path]
- * @returns { Promise<boolean> }
+ * @returns { Promise<FileBuffer[]> }
  */
 export async function fromHtmlFileToString(data: HTMLTarget[], path?: string): Promise<FileBuffer[]> {
     try {
-        let folderRoot: any;
+        const folderRoot: string = setPath(path ?? undefined);
         
-        if (path) {
-            folderRoot = path;
-        }
-        else {
-            folderRoot = __filename.split('\\node_modules');
-            folderRoot = (folderRoot.length > 1 ? folderRoot[0] : folderRoot[0].split('\\dist')[0]) + '/temp/target/';
-        }
-        
-        const countProjects = data.length;
+        const countProjects: number = data.length;
 
         if (countProjects > 0) {
             const res: FileBuffer[] = [];
 
             for(let i = 0; i < countProjects; i++) {
-                if (data[i].projectName) {
+                if (data[i].projectName && data[i].fileName) {
                     let project: FileBuffer = {
                         name: data[i].projectName,
                         options: data[i].pdfOptions
                     };
-    
-                    if (data[i].compile) {
-                        project['htmlOptions'] = data[i].ifCompile;
-                        // ...
+
+                    if (folderRoot === setPath()) {
+                        project['text'] = await fs.promises.readFile(
+                            pathModule.join(folderRoot, '/temp/target/', data[i].fileName),
+                            {encoding: 'utf-8'}
+                        );
+                    } else {
+                        project['text'] = await fs.promises.readFile(
+                            pathModule.join(folderRoot, data[i].fileName),
+                            {encoding: 'utf-8'}
+                        );
                     }
-    
-                    project['text'] = await fs.promises.readFile(folderRoot + data[i].fileName, { encoding: 'utf-8' });
-    
+
                     res.push(project);
                     delete data[i];
                 }
                 else {
                     let project: FileBuffer = {
                         name: data[i].projectName,
-                        error: new Error('Projects need name.')
+                        error: new Error('Projects need name && file name.')
                     };
                     res.push(project);
                     delete data[i];
@@ -302,8 +299,8 @@ export async function getPdf(targets: FileBuffer[], save: boolean = false): Prom
  * @param { string } [path]
  * @returns { Promise<FileBuffer[]> }
  */
-export async function fromHtmlFileToPdf(files: HTMLTarget[], save: boolean, path?: string): Promise<FileBuffer[]> {
-    let formatedFiles = await fromHtmlFileToString(files, path ?? undefined);
+export async function fromHtmlFileToPdf(files: HTMLTarget[], save: boolean, path?: Path): Promise<FileBuffer[]> {
+    let formatedFiles = await fromHtmlFileToString(files, path?.toGetFiles ?? undefined);
     const browser = await initBrowser();
     if (save) {
         await initDefaultFolder();
@@ -319,12 +316,41 @@ export async function fromHtmlFileToPdf(files: HTMLTarget[], save: boolean, path
     return formatedFiles;
 }
 
+/**
+ * @author DOUAL Sofian
+ * @description It returns the path of the app directory if path param does not exists.
+ *  Else if path param exists and it is a relative path, this method joins it with the path of app directory to finally returns the result as string.
+ *  Else if path param exists and it is an absolute path, this methods return it.
+ *
+ * @param { string } [path]
+ * @returns { string }
+ */
+export function setPath(path?: string): string{
+    try {
+        if(path) {
+            if (pathModule.isAbsolute(path)) {
+                return path;
+            } else {
+                let dirPath: any= __filename.split('\\node_modules');
+                dirPath = (dirPath.length > 1 ? dirPath[0] : dirPath[0].split('\\dist')[0]);
+                return pathModule.join(dirPath, path);
+            }
+        } else {
+            let dirPath: any= __filename.split('\\node_modules');
+            dirPath = (dirPath.length > 1 ? dirPath[0] : dirPath[0].split('\\dist')[0]);
+            return dirPath;
+        }
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
+// MODELS
+
 export interface HTMLTarget {
     projectName: string,
     fileName: string,
     pdfOptions: puppeteer.PDFOptions,
-    compile: boolean,
-    ifCompile?: any[]
 }
 
 export interface FileBuffer {
@@ -334,6 +360,10 @@ export interface FileBuffer {
     buffer?: Buffer,
     options?: puppeteer.PDFOptions,
     pathOfsavedFile?: string,
-    htmlOptions?: any[],
     error?: any,
+}
+
+interface Path {
+    toGetFiles: string;
+    toSaveFiles: string;
 }
