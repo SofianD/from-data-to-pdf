@@ -270,14 +270,14 @@ export async function fromHtmlFileToString(data: HTMLTarget[], path?: string): P
  * @param { boolean } [save]
  * @returns { Promise<FileBuffer[]> }
  */
-export async function getPdf(targets: FileBuffer[], save: boolean = false): Promise<FileBuffer[]> {
+export async function getPdf(targets: FileBuffer[], save: boolean, path?: Path): Promise<FileBuffer[]> {
     const browser = await initBrowser();
     if (save) {
-
-        await initDefaultFolder();
-
-        let folderToSavePdf: any= __filename.split('\\node_modules');
-        folderToSavePdf = (folderToSavePdf.length > 1 ? folderToSavePdf[0] : folderToSavePdf[0].split('\\dist')[0]) + '/temp/generatedPDF/';
+        let folderToSavePdf: string = setPath(path?.toSaveFiles ?? undefined);
+        if (!path?.toSaveFiles) {
+            await initDefaultFolder();
+            folderToSavePdf = pathModule.join(folderToSavePdf, '/temp/generatedPDF/');
+        }
         
         targets = await generateBuffer(browser, targets, folderToSavePdf);
     }
@@ -366,6 +366,6 @@ export interface FileBuffer {
 }
 
 interface Path {
-    toGetFiles: string;
-    toSaveFiles: string;
+    toGetFiles?: string;
+    toSaveFiles?: string;
 }
