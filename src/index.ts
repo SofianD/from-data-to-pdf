@@ -265,28 +265,27 @@ export async function fromHtmlFileToString(data: HTMLTarget[], path?: string): P
 
 /**
  * @author DOUAL Sofian
- * @description Carries out the process without to save pdf.
+ * @description Carries out the process without to get local files.
  *
  * @export
  * @param { FileBuffer[] } targets
- * @param { boolean } [save]
+ * @param { boolean } save
+ * @param { path } [path]
  * @returns { Promise<FileBuffer[]> }
  */
-export async function getPdf(targets: FileBuffer[], save: boolean, path?: Path): Promise<FileBuffer[]> {
+export async function getPdf(targets: FileBuffer[], save: boolean, path?: string): Promise<FileBuffer[]> {
     const browser = await initBrowser();
     if (save) {
-        let folderToSavePdf: string = setPath(path?.toSaveFiles ?? undefined);
-        if (!path?.toSaveFiles) {
+        let folderToSavePdf: string = setPath(path ?? undefined);
+        if (!path) {
             await initDefaultFolder();
             folderToSavePdf = pathModule.join(folderToSavePdf, '/temp/generatedPDF/');
         }
-        
         targets = await generateBuffer(browser, targets, folderToSavePdf);
     }
     else {
         targets = await generateBuffer(browser, targets);
     }
-    // targets = await generateBuffer(browser, targets);
     await closeBrowser(browser);
     return targets;
 }
@@ -298,7 +297,7 @@ export async function getPdf(targets: FileBuffer[], save: boolean, path?: Path):
  * @export
  * @param { HTMLTarget[] } files
  * @param { boolean } save
- * @param { string } [path]
+ * @param { Path } [path]
  * @returns { Promise<FileBuffer[]> }
  */
 export async function fromHtmlFileToPdf(files: HTMLTarget[], save: boolean, path?: Path): Promise<FileBuffer[]> {
@@ -352,19 +351,19 @@ export function setPath(path?: string): string{
 // MODELS
 
 export interface HTMLTarget {
-    projectName: string,
-    fileName: string,
-    pdfOptions: puppeteer.PDFOptions,
+    projectName: string;
+    fileName: string;
+    pdfOptions: puppeteer.PDFOptions;
 }
 
 export interface FileBuffer {
-    name: string,
-    url?: string,
-    text?: string,
-    buffer?: Buffer,
-    options?: puppeteer.PDFOptions,
-    pathOfsavedFile?: string,
-    error?: any,
+    name: string;
+    url?: string;
+    text?: string;
+    buffer?: Buffer;
+    options?: puppeteer.PDFOptions;
+    pathOfsavedFile?: string;
+    error?: any;
 }
 
 interface Path {
