@@ -1,5 +1,11 @@
 # from-data-to-pdf
-This library converts html files, URL and character string from html files to PDF files or PDF buffer.
+This library converts html files to PDF files or PDF buffer.
+
+Is working for:
+-   URL.
+-   local html files.
+-   html as string.
+-   text.
 
 ## Installation
 ```$ npm i from-data-to-pdf```
@@ -26,7 +32,7 @@ async function main() {
             },
             {
                 name: 'String of html',
-                text: '<string>'
+                text: '<html string>'
             }
         ]
     );
@@ -50,6 +56,8 @@ main();
 ## fromHtmlFileToPdf(files: HTMLTarget[], path?: string): Promise<FileBuffer[]>
 -   files:
     * list of [HTMLTarget](#HTMLTarget).
+    * **HTML files must be in folder** `path-of-your-app/temp/target/`. 
+      You can use method `initDefaultFolder()`. Then, import your files in `path-of-your-app/temp/target/`.
 -   save:
     * type `boolean`.
     * `true` to save targets.
@@ -63,6 +71,11 @@ main();
 async function main() {
     const dataToPdf = require("from-data-to-pdf");
 
+    // If my html files are not in my-app/temp/target/ folder:
+    await dataToPdf.initDefaultFolder();
+    // Now, I move my html files in the created folder: my-app/temp/target/project1.html
+    // Then...
+
     const data = [
         {
             projectName: "Test1",
@@ -70,14 +83,14 @@ async function main() {
         }
     ];
 
-    const listOfPdfBuffer = await dataToPdf.fromHtmlFileToPdf(data, true);
+    const listOfSavedPDF = await dataToPdf.fromHtmlFileToPdf(data, true);
 
-    console.log(listOfPdfBuffer);
+    console.log(listOfSavedPDF);
     // Display:
     // [
     //     {
     //         name: 'Test1',
-    //         pathOfsavedFile: <Buffer>
+    //         pathOfsavedFile: 'my-app/temp/generatedPDF/test1.pdf'
     //     }
     // ]
 }
