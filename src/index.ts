@@ -41,7 +41,7 @@ export async function closeBrowser(browser: Browser): Promise<void> {
 
 /**
  * @author DOUAL Sofian
- * @description Return an array of PDFS buffer.
+ * @description If path is undefined, returns an array of PDFS buffer. Otherwise, return the path of the saved PDF files.
  *
  * @export
  * @param { Browser } browser
@@ -160,33 +160,36 @@ export async function savePDF(targets: FileBuffer[]): Promise<FileBuffer[]> {
  */
 export async function initDefaultFolder(): Promise<boolean> {
     try {
-        let folderRoot: any= __filename.split('\\node_modules');
-        folderRoot = (folderRoot.length > 1 ? folderRoot[0] : folderRoot[0].split('\\dist')[0]);
+        let folderRoot: string = setPath();
         
 
         let contentFolder = await fs.promises.readdir(folderRoot);
         contentFolder = contentFolder.filter(x => x === 'temp');
 
+        const tempPath: string = setPath('./temp/');
+        const targetPath: string = setPath('./temp/target/)');
+        const pdfPath: string = setPath('./temp/generatedPDF/');
+
         if (contentFolder.length === 0) {
-            await fs.promises.mkdir(folderRoot + '/temp/');
+            await fs.promises.mkdir(tempPath);
 
-            await fs.promises.mkdir(folderRoot + '/temp/target/');
+            await fs.promises.mkdir(targetPath);
 
-            await fs.promises.mkdir(folderRoot + '/temp/generatedPDF/');
+            await fs.promises.mkdir(pdfPath);
 
             return false;
         }
         else {
-            const contentTemp = await fs.promises.readdir(folderRoot + '/temp/');
+            const contentTemp = await fs.promises.readdir(tempPath);
             let reload = false;
 
             if (!contentTemp.includes('target')) {
-                await fs.promises.mkdir(folderRoot + '/temp/target/');
+                await fs.promises.mkdir(targetPath);
                 reload = true;
             }
 
             if (!contentTemp.includes('generatedPDF')) {
-                await fs.promises.mkdir(folderRoot + '/temp/generatedPDF/');
+                await fs.promises.mkdir(pdfPath);
                 reload = true;
             }
 
@@ -195,7 +198,6 @@ export async function initDefaultFolder(): Promise<boolean> {
             return true;
         }
     } catch (error) {
-        // console.log(error);
         throw new Error(error);
     }
 }
