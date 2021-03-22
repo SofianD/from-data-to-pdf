@@ -23,9 +23,11 @@ Is working for:
     * type `string`.
 
 ```js
-async function main() {
-    const dataToPdf = require("from-data-to-pdf");
+const dataToPdf = require("from-data-to-pdf");
 
+main();
+
+async function main() {
     const data =[
         {
             name: 'Google',
@@ -52,7 +54,7 @@ async function main() {
     //     }
     // ]
 }
-main();
+
 ```
 
 ## fromHtmlFileToPdf(files: [HTMLTarget](#HTMLTarget), save: boolean, path?: [Path](#Path)): Promise<FileBuffer[]>
@@ -69,14 +71,11 @@ main();
 > ***CSS must be in your html files.***
 
 ```js
+const dataToPdf = require("from-data-to-pdf");
+
+main();
+
 async function main() {
-    const dataToPdf = require("from-data-to-pdf");
-
-    // If I don't have custom path:
-    await dataToPdf.initDefaultFolder();
-    // Now, I move my html files in the created folder: my-app/temp/target/project1.html
-    // Then...
-
     const data = [
         {
             projectName: "Mon Fichier",
@@ -84,6 +83,22 @@ async function main() {
         }
     ];
 
+    // If this is my first time using this package and I don't have a custom path to get templates.
+    // I run the function below once:
+    await dataToPdf.initDefaultFolder();
+    // Now, I move my html files in the created folder: my-app/temp/target/
+    // Then:
+    const listOfSavedPDF = await dataToPdf.fromHtmlFileToPdf(data, true);
+    // Display:
+    // [
+    //     {
+    //         name: 'Test',
+    //         pathOfsavedFile: 'my-app/temp/generatedPDF/Mon-Fichier1561654165.pdf'
+    //     }
+    // ]
+
+
+    // Else...
     const listOfSavedPDF = await dataToPdf.fromHtmlFileToPdf(data, true, {
         toGetFiles: 'C:/Users/Me/Documents/MyTemplates/',
         toSaveFiles: 'C:/Users/Me/Documents/MyPDF/'
@@ -99,7 +114,6 @@ async function main() {
     // ]
 }
 
-main();
 ```
 
 # Models
