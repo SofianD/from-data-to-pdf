@@ -88,7 +88,9 @@ async function main() {
     await dataToPdf.initDefaultFolder();
     // Now, I move my html files in the created folder: my-app/temp/target/
     // Then:
+
     const listOfSavedPDF = await dataToPdf.fromHtmlFileToPdf(data, true);
+    console.log(listOfSavedPDF);
     // Display:
     // [
     //     {
@@ -98,7 +100,7 @@ async function main() {
     // ]
 
 
-    // Else...
+    // Else if I have custom path:
     const listOfSavedPDF = await dataToPdf.fromHtmlFileToPdf(data, true, {
         toGetFiles: 'C:/Users/Me/Documents/MyTemplates/',
         toSaveFiles: 'C:/Users/Me/Documents/MyPDF/'
