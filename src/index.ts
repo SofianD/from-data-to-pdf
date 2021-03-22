@@ -366,7 +366,7 @@ export interface FileBuffer {
     error?: any;
 }
 
-interface Path {
+export interface Path {
     toGetFiles?: string;
     toSaveFiles?: string;
 }
