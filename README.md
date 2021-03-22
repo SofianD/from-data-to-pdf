@@ -37,9 +37,9 @@ async function main() {
         }
     ];
 
-    const listOfPdfBuffer = await dataToPdf.getPdf(data, true, 'C:/Users/Me/Documents/MyPDF/');
+    const listOfSavedFiles = await dataToPdf.getPdf(data, true, 'C:/Users/Me/Documents/MyPDF/');
 
-    console.log(listOfPdfBuffer);
+    console.log(listOfSavedFiles);
     // Display:
     // [
     //     {
