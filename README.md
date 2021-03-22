@@ -72,26 +72,29 @@ main();
 async function main() {
     const dataToPdf = require("from-data-to-pdf");
 
-    // If my html files are not in my-app/temp/target/ and I don't have a custom path:
+    // If I don't have custom path:
     await dataToPdf.initDefaultFolder();
     // Now, I move my html files in the created folder: my-app/temp/target/project1.html
     // Then...
 
     const data = [
         {
-            projectName: "Test",
+            projectName: "Mon Fichier",
             fileName: "project1.html"
         }
     ];
 
-    const listOfSavedPDF = await dataToPdf.fromHtmlFileToPdf(data, true, 'C:/Users/Me/Documents/MyPDF/');
+    const listOfSavedPDF = await dataToPdf.fromHtmlFileToPdf(data, true, {
+        toGetFiles: 'C:/Users/Me/Documents/MyTemplates/',
+        toSaveFiles: 'C:/Users/Me/Documents/MyPDF/'
+    });
 
     console.log(listOfSavedPDF);
     // Display:
     // [
     //     {
     //         name: 'Test',
-    //         pathOfsavedFile: 'C:/Users/Me/Documents/MyPDF/test1561654165.pdf'
+    //         pathOfsavedFile: 'C:/Users/Me/Documents/MyPDF/mon-fichier1561654165.pdf'
     //     }
     // ]
 }
