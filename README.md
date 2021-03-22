@@ -12,7 +12,7 @@ Is working for:
 
 # Usage
 
-## getPdf(targets: [FileBuffer](#FileBuffer), save: string, path?: string): Promise<FileBuffer[]>
+## getPdf(targets: [FileBuffer](#FileBuffer), save: boolean, path?: string): Promise<FileBuffer[]>
 -   targets:
     * list of [FileBuffer](#FileBuffer).
 -   save:
