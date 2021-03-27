@@ -1,0 +1,305 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>from-data-to-pdf</title>
+	<meta name="description" content="Documentation for from-data-to-pdf">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+	<script async src="assets/js/search.js" id="search-script"></script>
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">from-data-to-pdf</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<h1>from-data-to-pdf</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<a href="#from-data-to-pdf" id="from-data-to-pdf" style="color: inherit; text-decoration: none;">
+					<h1>from-data-to-pdf</h1>
+				</a>
+				<p>This library converts html files to PDF files or PDF buffer.</p>
+				<p>Is working for:</p>
+				<ul>
+					<li>  URL.</li>
+					<li>  local html files.</li>
+					<li>  html as string.</li>
+					<li>  text.</li>
+				</ul>
+				<p>Visit <a href="https://sofiand.github.io/from-data-to-pdf/">from-data-to-pdf</a>.</p>
+				<a href="#installation" id="installation" style="color: inherit; text-decoration: none;">
+					<h2>Installation</h2>
+				</a>
+				<p><code>$ npm i from-data-to-pdf</code></p>
+				<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
+					<h1>Usage</h1>
+				</a>
+				<a href="#getpdftargets-save-path" id="getpdftargets-save-path" style="color: inherit; text-decoration: none;">
+					<h2>getPdf(targets, save, path?)</h2>
+				</a>
+				<ul>
+					<li>targets:<ul>
+							<li>list of <a href="#FileBuffer">FileBuffer</a>.</li>
+						</ul>
+					</li>
+					<li>save:<ul>
+							<li>type <code>boolean</code>.</li>
+							<li><code>true</code> to save targets, <code>false</code> to get buffers.</li>
+						</ul>
+					</li>
+					<li>path:<ul>
+							<li>is optionnal.</li>
+							<li>type <code>string</code>.</li>
+						</ul>
+					</li>
+				</ul>
+				<pre><code class="language-js"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">dataToPdf</span><span style="color: #000000"> = </span><span style="color: #795E26">require</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;from-data-to-pdf&quot;</span><span style="color: #000000">);</span>
+
+<span style="color: #795E26">main</span><span style="color: #000000">();</span>
+
+<span style="color: #0000FF">async</span><span style="color: #000000"> </span><span style="color: #0000FF">function</span><span style="color: #000000"> </span><span style="color: #795E26">main</span><span style="color: #000000">() {</span>
+<span style="color: #000000">    </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">data</span><span style="color: #000000"> =[</span>
+<span style="color: #000000">        {</span>
+<span style="color: #000000">            </span><span style="color: #001080">name:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;Google&#039;</span><span style="color: #000000">,</span>
+<span style="color: #000000">            </span><span style="color: #001080">url:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;https://www.google.com&#039;</span>
+<span style="color: #000000">        },</span>
+<span style="color: #000000">        {</span>
+<span style="color: #000000">            </span><span style="color: #001080">name:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;String of html&#039;</span><span style="color: #000000">,</span>
+<span style="color: #000000">            </span><span style="color: #001080">text:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;&lt;html string&gt;&#039;</span>
+<span style="color: #000000">        }</span>
+<span style="color: #000000">    ];</span>
+
+<span style="color: #000000">    </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">listOfSavedFiles</span><span style="color: #000000"> = </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">dataToPdf</span><span style="color: #000000">.</span><span style="color: #795E26">getPdf</span><span style="color: #000000">(</span><span style="color: #001080">data</span><span style="color: #000000">, </span><span style="color: #0000FF">true</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;C:/Users/Me/Documents/MyPDF/&#039;</span><span style="color: #000000">);</span>
+
+<span style="color: #000000">    </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">listOfSavedFiles</span><span style="color: #000000">);</span>
+<span style="color: #000000">    </span><span style="color: #008000">// Display:</span>
+<span style="color: #000000">    </span><span style="color: #008000">// [</span>
+<span style="color: #000000">    </span><span style="color: #008000">//     {</span>
+<span style="color: #000000">    </span><span style="color: #008000">//         name: &#039;Google&#039;,</span>
+<span style="color: #000000">    </span><span style="color: #008000">//         pathOfsavedFile: &#039;C:/Users/Me/Documents/MyPDF/google15156514.pdf&#039;</span>
+<span style="color: #000000">    </span><span style="color: #008000">//     },</span>
+<span style="color: #000000">    </span><span style="color: #008000">//     {</span>
+<span style="color: #000000">    </span><span style="color: #008000">//         name: &#039;String of html&#039;,</span>
+<span style="color: #000000">    </span><span style="color: #008000">//         pathOfsavedFile: &#039;C:/Users/Me/Documents/MyPDF/string-of-html15156515.pdf&#039;</span>
+<span style="color: #000000">    </span><span style="color: #008000">//     }</span>
+<span style="color: #000000">    </span><span style="color: #008000">// ]</span>
+<span style="color: #000000">}</span>
+
+</code></pre>
+				<a href="#fromhtmlfiletopdffiles-save-path" id="fromhtmlfiletopdffiles-save-path" style="color: inherit; text-decoration: none;">
+					<h2>fromHtmlFileToPdf(files, save, path?)</h2>
+				</a>
+				<ul>
+					<li>files:<ul>
+							<li>list of <a href="#HTMLTarget">HTMLTarget</a>.</li>
+						</ul>
+					</li>
+					<li>save:<ul>
+							<li>type <code>boolean</code>.</li>
+							<li><code>true</code> to save targets, <code>false</code> to get buffers.</li>
+						</ul>
+					</li>
+					<li>path: <ul>
+							<li>is optionnal.</li>
+							<li>type <a href="#Path">Path</a>.</li>
+							<li>/!\ relative path starts from the app directory.</li>
+						</ul>
+					</li>
+				</ul>
+				<blockquote>
+					<p><em><strong>CSS must be in your html files.</strong></em></p>
+				</blockquote>
+				<pre><code class="language-js"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">dataToPdf</span><span style="color: #000000"> = </span><span style="color: #795E26">require</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;from-data-to-pdf&quot;</span><span style="color: #000000">);</span>
+
+<span style="color: #795E26">main</span><span style="color: #000000">();</span>
+
+<span style="color: #0000FF">async</span><span style="color: #000000"> </span><span style="color: #0000FF">function</span><span style="color: #000000"> </span><span style="color: #795E26">main</span><span style="color: #000000">() {</span>
+<span style="color: #000000">    </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">data</span><span style="color: #000000"> = [</span>
+<span style="color: #000000">        {</span>
+<span style="color: #000000">            </span><span style="color: #001080">projectName:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;Mon Fichier&quot;</span><span style="color: #000000">,</span>
+<span style="color: #000000">            </span><span style="color: #001080">fileName:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;project1.html&quot;</span>
+<span style="color: #000000">        }</span>
+<span style="color: #000000">    ];</span>
+
+<span style="color: #000000">    </span><span style="color: #008000">// If this is my first time using this package and I don&#039;t have a custom path to get templates.</span>
+<span style="color: #000000">    </span><span style="color: #008000">// I use the function below once:</span>
+<span style="color: #000000">    </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">dataToPdf</span><span style="color: #000000">.</span><span style="color: #795E26">initDefaultFolder</span><span style="color: #000000">();</span>
+<span style="color: #000000">    </span><span style="color: #008000">// Now, I move my html files in the created folder: my-app/temp/target/</span>
+<span style="color: #000000">    </span><span style="color: #008000">// Then:</span>
+<span style="color: #000000">    </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">listOfSavedPDF</span><span style="color: #000000"> = </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">dataToPdf</span><span style="color: #000000">.</span><span style="color: #795E26">fromHtmlFileToPdf</span><span style="color: #000000">(</span><span style="color: #001080">data</span><span style="color: #000000">, </span><span style="color: #0000FF">true</span><span style="color: #000000">);</span>
+<span style="color: #000000">    </span><span style="color: #008000">// listOfSavedPDF:</span>
+<span style="color: #000000">    </span><span style="color: #008000">// [</span>
+<span style="color: #000000">    </span><span style="color: #008000">//     {</span>
+<span style="color: #000000">    </span><span style="color: #008000">//         name: &#039;Test&#039;,</span>
+<span style="color: #000000">    </span><span style="color: #008000">//         pathOfsavedFile: &#039;my-app/temp/generatedPDF/Mon-Fichier1561654165.pdf&#039;</span>
+<span style="color: #000000">    </span><span style="color: #008000">//     }</span>
+<span style="color: #000000">    </span><span style="color: #008000">// ]</span>
+
+
+<span style="color: #000000">    </span><span style="color: #008000">// Else if I have custom path:</span>
+<span style="color: #000000">    </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">listOfSavedPDF</span><span style="color: #000000"> = </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">dataToPdf</span><span style="color: #000000">.</span><span style="color: #795E26">fromHtmlFileToPdf</span><span style="color: #000000">(</span><span style="color: #001080">data</span><span style="color: #000000">, </span><span style="color: #0000FF">true</span><span style="color: #000000">, {</span>
+<span style="color: #000000">        </span><span style="color: #001080">toGetFiles:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;C:/Users/Me/Documents/MyTemplates/&#039;</span><span style="color: #000000">,</span>
+<span style="color: #000000">        </span><span style="color: #001080">toSaveFiles:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;C:/Users/Me/Documents/MyPDF/&#039;</span>
+<span style="color: #000000">    });</span>
+<span style="color: #000000">    </span><span style="color: #008000">// listOfSavedPDF:</span>
+<span style="color: #000000">    </span><span style="color: #008000">// [</span>
+<span style="color: #000000">    </span><span style="color: #008000">//     {</span>
+<span style="color: #000000">    </span><span style="color: #008000">//         name: &#039;Test&#039;,</span>
+<span style="color: #000000">    </span><span style="color: #008000">//         pathOfsavedFile: &#039;C:/Users/Me/Documents/MyPDF/mon-fichier1561654165.pdf&#039;</span>
+<span style="color: #000000">    </span><span style="color: #008000">//     }</span>
+<span style="color: #000000">    </span><span style="color: #008000">// ]</span>
+<span style="color: #000000">}</span>
+
+</code></pre>
+				<a href="#models" id="models" style="color: inherit; text-decoration: none;">
+					<h1>Models</h1>
+				</a>
+				<a href="#htmltarget" id="htmltarget" style="color: inherit; text-decoration: none;">
+					<h2>HTMLTarget</h2>
+				</a>
+				<pre><code class="language-ts"><span style="color: #AF00DB">export</span><span style="color: #000000"> </span><span style="color: #0000FF">interface</span><span style="color: #000000"> </span><span style="color: #267F99">HTMLTarget</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #001080">projectName</span><span style="color: #000000">: </span><span style="color: #267F99">string</span><span style="color: #000000">;</span>
+<span style="color: #000000">    </span><span style="color: #001080">fileName</span><span style="color: #000000">: </span><span style="color: #267F99">string</span><span style="color: #000000">;</span>
+<span style="color: #000000">    </span><span style="color: #001080">pdfOptions</span><span style="color: #000000">: </span><span style="color: #267F99">PdfOptions</span><span style="color: #000000">;</span>
+<span style="color: #000000">}</span>
+</code></pre>
+				<a href="#filebuffer" id="filebuffer" style="color: inherit; text-decoration: none;">
+					<h2>FileBuffer</h2>
+				</a>
+				<pre><code class="language-ts"><span style="color: #AF00DB">export</span><span style="color: #000000"> </span><span style="color: #0000FF">interface</span><span style="color: #000000"> </span><span style="color: #267F99">FileBuffer</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #001080">name</span><span style="color: #000000">: </span><span style="color: #267F99">string</span><span style="color: #000000">;</span>
+<span style="color: #000000">    </span><span style="color: #001080">url</span><span style="color: #000000">?: </span><span style="color: #267F99">string</span><span style="color: #000000">;</span>
+<span style="color: #000000">    </span><span style="color: #001080">text</span><span style="color: #000000">?: </span><span style="color: #267F99">string</span><span style="color: #000000">;</span>
+<span style="color: #000000">    </span><span style="color: #001080">buffer</span><span style="color: #000000">?: </span><span style="color: #267F99">Buffer</span><span style="color: #000000">;</span>
+<span style="color: #000000">    </span><span style="color: #001080">options</span><span style="color: #000000">?: </span><span style="color: #267F99">puppeteer</span><span style="color: #000000">.</span><span style="color: #267F99">PDFOptions</span><span style="color: #000000">;</span>
+<span style="color: #000000">    </span><span style="color: #001080">pathOfsavedFile</span><span style="color: #000000">?: </span><span style="color: #267F99">string</span><span style="color: #000000">;</span>
+<span style="color: #000000">    </span><span style="color: #001080">error</span><span style="color: #000000">?: </span><span style="color: #267F99">any</span><span style="color: #000000">;</span>
+<span style="color: #000000">}</span>
+</code></pre>
+				<a href="#path" id="path" style="color: inherit; text-decoration: none;">
+					<h2>Path</h2>
+				</a>
+				<pre><code class="language-ts"><span style="color: #AF00DB">export</span><span style="color: #000000"> </span><span style="color: #0000FF">interface</span><span style="color: #000000"> </span><span style="color: #267F99">Path</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #001080">toGetFiles</span><span style="color: #000000">?: </span><span style="color: #267F99">string</span><span style="color: #000000">;</span>
+<span style="color: #000000">    </span><span style="color: #001080">toSaveFiles</span><span style="color: #000000">?: </span><span style="color: #267F99">string</span><span style="color: #000000">;</span>
+<span style="color: #000000">}</span>
+</code></pre>
+				<a href="#puppeterpdfoptions" id="puppeterpdfoptions" style="color: inherit; text-decoration: none;">
+					<h2>puppeter.PDFOptions</h2>
+				</a>
+				<blockquote>
+					<p>Visit <a href="https://pptr.dev/#?product=Puppeteer&amp;version=v8.0.0&amp;show=api-pagepdfoptions">puppeteer.PDFOptions</a> for more informations.</p>
+				</blockquote>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class=" ">
+						<a href="modules.html">Exports</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/filebuffer.html" class="tsd-kind-icon">File<wbr>Buffer</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/htmltarget.html" class="tsd-kind-icon">HTMLTarget</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/path.html" class="tsd-kind-icon">Path</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#closebrowser" class="tsd-kind-icon">close<wbr>Browser</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#fromhtmlfiletopdf" class="tsd-kind-icon">from<wbr>Html<wbr>File<wbr>ToPdf</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#fromhtmlfiletostring" class="tsd-kind-icon">from<wbr>Html<wbr>File<wbr>ToString</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#generatebuffer" class="tsd-kind-icon">generate<wbr>Buffer</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#getpdf" class="tsd-kind-icon">get<wbr>Pdf</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#initbrowser" class="tsd-kind-icon">init<wbr>Browser</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#initdefaultfolder" class="tsd-kind-icon">init<wbr>Default<wbr>Folder</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#savepdf" class="tsd-kind-icon">savePDF</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#setpath" class="tsd-kind-icon">set<wbr>Path</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
