@@ -6,8 +6,6 @@ import * as pathModule from "path"
 /**
  * @author DOUAL Sofian
  * @description Return a browser.
- *
- * @export
  * @returns { Promise<Browser> }
  */
 export async function initBrowser(): Promise<Browser> {
@@ -23,8 +21,6 @@ export async function initBrowser(): Promise<Browser> {
 /**
  * @author DOUAL Sofian
  * @description Close given browser.
- *
- * @export
  * @param { Browser } browser
  * @returns { Promise<void> }
  */
@@ -42,8 +38,6 @@ export async function closeBrowser(browser: Browser): Promise<void> {
 /**
  * @author DOUAL Sofian
  * @description If path is undefined, returns an array of PDFS buffer. Otherwise, return the path of the saved PDF files.
- *
- * @export
  * @param { Browser } browser
  * @param { FileBuffer[] } targets
  * @param { string } [path]
@@ -120,8 +114,6 @@ export async function generateBuffer(browser: Browser, targets: FileBuffer[], pa
 /**
  * @author DOUAL Sofian
  * @description Save the buffer as a PDF file in <My project>/temp/generatedPDF/.
- *
- * @export
  * @param { FileBuffer[] } targets
  * @returns { Promise<FileBuffer[]> }
  */
@@ -154,8 +146,7 @@ export async function savePDF(targets: FileBuffer[]): Promise<FileBuffer[]> {
 
 /**
  * @author DOUAL Sofian
- * @description Create folders ./temp, ./temp/target, ./temp/generatedPDF
- *
+ * @description Create folders `/myApp/temp`, `/myApp/temp/target`, `/myApp/temp/generatedPDF`.
  * @returns { Promise<boolean> }
  */
 export async function initDefaultFolder(): Promise<boolean> {
@@ -205,7 +196,6 @@ export async function initDefaultFolder(): Promise<boolean> {
 /**
  * @author DOUAL Sofian
  * @description Converts HTML files to string.
- *
  * @param { HTMLTarget[] } data
  * @param { string } [path]
  * @returns { Promise<FileBuffer[]> }
@@ -266,8 +256,6 @@ export async function fromHtmlFileToString(data: HTMLTarget[], path?: string): P
 /**
  * @author DOUAL Sofian
  * @description Carries out the process without to get local files.
- *
- * @export
  * @param { FileBuffer[] } targets
  * @param { boolean } save
  * @param { path } [path]
@@ -293,8 +281,6 @@ export async function getPdf(targets: FileBuffer[], save: boolean, path?: string
 /**
  * @author DOUAL Sofian
  * @description Get html files and carries out the process.
- *
- * @export
  * @param { HTMLTarget[] } files
  * @param { boolean } save
  * @param { Path } [path]
@@ -324,7 +310,6 @@ export async function fromHtmlFileToPdf(files: HTMLTarget[], save: boolean, path
  * @description It returns the path of the app directory if path param does not exists.
  *  Else if path param exists and it is a relative path, this method joins it with the path of app directory to finally returns the result as string.
  *  Else if path param exists and it is an absolute path, this methods return it.
- *
  * @param { string } [path]
  * @returns { string }
  */
@@ -350,12 +335,18 @@ export function setPath(path?: string): string{
 
 // MODELS
 
+/**
+ * @interface
+ */
 export interface HTMLTarget {
     projectName: string;
     fileName: string;
     pdfOptions: puppeteer.PDFOptions;
 }
 
+/**
+ * @interface
+ */
 export interface FileBuffer {
     name: string;
     url?: string;
@@ -366,6 +357,9 @@ export interface FileBuffer {
     error?: any;
 }
 
+/**
+ * @interface
+ */
 export interface Path {
     toGetFiles?: string;
     toSaveFiles?: string;

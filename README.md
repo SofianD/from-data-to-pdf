@@ -1,4 +1,5 @@
 # from-data-to-pdf
+
 This library converts html files to PDF files or PDF buffer.
 
 Is working for:
@@ -7,12 +8,14 @@ Is working for:
 -   html as string.
 -   text.
 
+Visit [from-data-to-pdf](https://sofiand.github.io/from-data-to-pdf/).
+
 ## Installation
 ```$ npm i from-data-to-pdf```
 
 # Usage
 
-## getPdf(targets: [FileBuffer](#FileBuffer), save: boolean, path?: string): Promise<FileBuffer[]>
+## getPdf(targets, save, path?)
 -   targets:
     * list of [FileBuffer](#FileBuffer).
 -   save:
@@ -57,7 +60,7 @@ async function main() {
 
 ```
 
-## fromHtmlFileToPdf(files: [HTMLTarget](#HTMLTarget), save: boolean, path?: [Path](#Path)): Promise<FileBuffer[]>
+## fromHtmlFileToPdf(files, save, path?)
 -   files:
     * list of [HTMLTarget](#HTMLTarget).
 -   save:
@@ -84,14 +87,12 @@ async function main() {
     ];
 
     // If this is my first time using this package and I don't have a custom path to get templates.
-    // I run the function below once:
+    // I use the function below once:
     await dataToPdf.initDefaultFolder();
     // Now, I move my html files in the created folder: my-app/temp/target/
     // Then:
-
     const listOfSavedPDF = await dataToPdf.fromHtmlFileToPdf(data, true);
-    console.log(listOfSavedPDF);
-    // Display:
+    // listOfSavedPDF:
     // [
     //     {
     //         name: 'Test',
@@ -105,9 +106,7 @@ async function main() {
         toGetFiles: 'C:/Users/Me/Documents/MyTemplates/',
         toSaveFiles: 'C:/Users/Me/Documents/MyPDF/'
     });
-
-    console.log(listOfSavedPDF);
-    // Display:
+    // listOfSavedPDF:
     // [
     //     {
     //         name: 'Test',
@@ -152,4 +151,4 @@ export interface Path {
 
 ## puppeter.PDFOptions
 
-> Check [puppeteer.PDFOptions](https://pptr.dev/#?product=Puppeteer&version=v8.0.0&show=api-pagepdfoptions) for more informations.
+> Visit [puppeteer.PDFOptions](https://pptr.dev/#?product=Puppeteer&version=v8.0.0&show=api-pagepdfoptions) for more informations.
